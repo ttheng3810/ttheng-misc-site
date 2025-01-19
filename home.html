@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tze Heng's Miscellaneous</title>
+    <link rel="stylesheet" href="./simple.css">
+    <!-- SAGE embedding initialisation -->
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <!-- SAGE embedding (basic) -->
+    <script>
+    sagecell.makeSagecell({inputLocation: '.sage',
+                           evalButtonText: 'Evaluate'});
+    <!-- SAGE embedding (linked) -->
+    sagecell.makeSagecell({inputLocation: '.linked',
+                           evalButtonText: 'Evaluate',
+                           linked: true});
+    </script>
+
+    <!-- KaTeX import-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js" integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+    });
+    </script>
+</head>
+    <body>
+        <header>
+            <nav>
+            <a href="https://www.ttheng.com">Main site</a>
+            <a href="https://blog.ttheng.com">Blog site</a>
+            <a href="mailto:contact@ttheng.com">Email</a>
+            </nav>
+            <h1>Tze Heng's Miscs</h1>
+            <p>This is a website where things that don't quite fit in either my main or blog site reside.</p>
+        </header>
+        
+          <main>
+            <h2>Sage codes for blog.ttheng.com</h2>
+
+            <h3><i>Dynamical Systems: Course Works</i></h3>
+
+            <p> 
+            These are some interactive <a href="https://www.sagemath.org/">Sage</a> code blocks for one of the articles in my <a href="https://blog.ttheng.com/">blog site</a>, titled <a href="https://blog.ttheng.com/docs/mathematics/dynamical-system-works"><i>Dynamical Systems: Course Works</i></a>, which serve as a demonstration of code implementations that are part of the workings of some exercises of a course about dynamical systems.
+            </p>
+
+            <p>
+            Due to the technical limitations of the Docusaurus framework that makes embedding interactive Sage code blocks there fairly involved, I have decided to put the code blocks here instead, as this site is built using raw HTML and CSS, which is more straightforward to work with.
+            </p>
+            
+            <h4>Chapter 1, Question 1</h4>
+
+            <p><i>Note: The following code blocks are linked, so previous code blocks need to be executed to ensure that the following ones run properly.</i></p>
+
+            <div class="linked">
+            <script type="text/x-sage">
+'''Iterative functional composition'''
+def compose_iter(f, pow):
+    composed = lambda x: x # identity function
+    for i in range(pow):
+        composed = (lambda g: lambda x: f(g(x)))(composed)
+    return composed
+
+# 2 positional argument ver.
+def compose_iter_2(f, pow):
+    composed = lambda x, y: (x, y) # identity function
+    for i in range(pow):
+        composed = (lambda g: lambda x, y: f(g(x, y)[0], g(x, y)[1]))(composed)
+    return composed
+            </script>
+            </div>
+<!-- https://doc.sagemath.org/html/en/prep/Advanced-2DPlotting.html -->
+            <div class="linked">
+            <script type="text/x-sage">
+# Define logistic equation, number of iterations and HOF for plot point generation               
+f_k = lambda k: lambda x: k * x * (1-x)
+iter_num = 200
+plot_point_gen = lambda k, x: list(enumerate([compose_iter(f_k(k), i)(x) for i in range(iter_num)]))
+
+# Plot points with different parameters of k and initial point x_0
+plot_points_1 = plot_point_gen(2, 0.01)
+plot_points_2 = plot_point_gen(3, 0.01)
+plot_points_3 = plot_point_gen(3.45, 0.01)
+plot_points_4 = plot_point_gen(3.5, 0.01)
+plot_points_5 = plot_point_gen(3.83, 0.5)
+
+# Plot objects based on the plot points defined above
+p1 = list_plot(plot_points_1, plotjoined=True, legend_label='k=2, x_0=0.01', color='blue')
+p2 = list_plot(plot_points_2, plotjoined=True, legend_label='k=3, x_0=0.01', color='red')
+p3 = list_plot(plot_points_3, plotjoined=True, legend_label='k=3.45, x_0=0.01', color='green')
+p4 = list_plot(plot_points_4, plotjoined=True, legend_label='k=3.5, x_0=0.01', color='magenta')
+p5 = list_plot(plot_points_5, plotjoined=True, legend_label='k=3.83, x_0=0.5', color='brown')
+
+G = graphics_array([p1, p2, p3, p4, p5], nrows=2, ncols=3)
+
+show(G, title='Logistic Equation Iterative Plots')
+
+# Optional: Display individual plots, manually switching from p1 through p5
+# show(p1, title='Logistic Equation Iterative Plots')
+            </script>
+            </div>
+
+            <h4>Chapter 1, Question 2</h4>
+
+            <p><i>Note: Please run the first code block (that defines <code>compose_iter_2</code>) beforehand so that this code block can execute properly.</i></p>
+
+            <p>The context of this code block is to implement <a href="https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Heron's_method">Heron's method of computing square roots</a>, by starting from a pair of positive integers \((1,z)\), then iteratively replacing the first and second coordinate by their arithmetic and harmonic means respectively. After a sufficient number of iterations, one can then see that the pair of numbers tends to \((\sqrt{z},\sqrt{z})\), yielding better approximations of the square root.</p>
+
+            <div class="linked">
+            <script type="text/x-sage">
+# Define function, initial point, number of iterations and generate plot points
+f = lambda x, y: ((x+y)/2, (2*x*y)/(x+y))
+x_0, y_0 = 1, 4 # Feel free to change y_0 to other positive integers (e.g. 720) and see what happens
+iter_num = 20
+plot_points = [compose_iter_2(f, i)(x_0, y_0) for i in range(iter_num)]
+
+# Generate plot plot object
+fig_plot = list_plot(plot_points, plotjoined=True, color='blue')
+
+# Show plot
+show(fig_plot, title='Square Root Approximation Iterative Plot')
+            </script>
+            </div>
+
+            <h4>Chapter 1, Question 3</h4>
+
+            The following code snippet demonstrates a specific case of the periodicity of the last digits (before the decimal point) of \(x_n\), where \(x_n=n^2p/q\) and \((p,q)=(8,3)\) (which are coprime).
+
+            <div class="sage">
+            <script type="text/x-sage">
+p, q = 8, 3 # Feel free to change this to other pairs of coprime natural numbers
+f(n) = (n^2*p)/q
+iter_num = 10
+for i in range(iter_num):
+    output = "".join([str(mod(floor(f(j)), 10)) for j in range(i*10*q, i*10*q+10*q+1)])
+    print(output)
+            </script>
+            </div>
+
+            <h2>Here's another 'email to me' button!</h2>
+           
+            <p><i>'cause why not?</i></p>
+
+            <a class="button" href="mailto:contact@ttheng.com">Email me!</a>
+
+          </main>
+        
+          <footer>
+            <p>&copy; <a href="https://ttheng.com/">Tan Tze Heng</a>. Design provided by <a href="https://simplecss.org">Simple.css</a>.</p>
+          </footer>
+    </body> 
+</html>
