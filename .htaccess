@@ -1,0 +1,16 @@
+# https://webmasters.stackexchange.com/a/126218
+# Disable MutliViews
+Options -Multiviews
+
+ErrorDocument 404 /index.html
+
+RewriteEngine on
+
+# Remove www subdomain and redirect to HTTPS
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Remove "index.html" from all URLs
+RewriteRule ^(|.+/)index\.html$ /$1 [R=301,L]
