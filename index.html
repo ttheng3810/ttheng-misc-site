@@ -114,6 +114,17 @@ show(G, title='Logistic Equation Iterative Plots')
             </script>
             </div>
 
+            <div class="linked">
+            <script type="text/x-sage">
+# Feel free to change the parameter k and initial value x_0 here
+k, x_0 = 2, 0.01
+
+plot_points = plot_point_gen(k, x_0)
+p = list_plot(plot_points, plotjoined=True, legend_label=f'k={k}, x_0={x_0}', color='blue')
+show(p, title='Logistic Equation Iterative Plot')
+            </script>
+            </div>
+
             <h4>Chapter 1, Question 2</h4>
 
             <p><i>Note: Please run the first code block (that defines <code>compose_iter_2</code>) beforehand so that this code block can execute properly.</i></p>
@@ -129,7 +140,7 @@ iter_num = 20
 plot_points = [compose_iter_2(f, i)(x_0, y_0) for i in range(iter_num)]
 
 # Generate plot plot object
-fig_plot = list_plot(plot_points, plotjoined=True, color='blue')
+fig_plot = sum(arrow(plot_points[i], plot_points[i+1], color='blue', width=1, arrowsize=3) for i in range(len(plot_points)-1))
 
 # Show plot
 show(fig_plot, title='Square Root Approximation Iterative Plot')
