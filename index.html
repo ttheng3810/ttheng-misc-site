@@ -75,7 +75,7 @@ def compose_iter(f, pow):
         composed = (lambda g: lambda x: f(g(x)))(composed)
     return composed
 
-# 2 positional argument ver.
+# 2 positional arguments ver.
 def compose_iter_2(f, pow):
     composed = lambda x, y: (x, y) # identity function
     for i in range(pow):
@@ -136,10 +136,11 @@ x_0, y_0 = 1, 4 # Feel free to change y_0 to other positive integers (e.g. 720) 
 iter_num = 20
 plot_points = [compose_iter_2(f, i)(x_0, y_0) for i in range(iter_num)]
 
-# Generate plot plot object
+# Generate plot object
 fig_plot = sum(arrow(plot_points[i], plot_points[i+1], color='blue', width=1, arrowsize=3) for i in range(len(plot_points)-1))
 
-# Show plot
+# Show plot and print final coordinates
+print(tuple(map(lambda x: RR(x), plot_points[-1])))
 show(fig_plot, title='Square Root Approximation Iterative Plot')
             </script>
             </div>
